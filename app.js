@@ -12,9 +12,15 @@ var db = {
 
 for (var i = 0; i < db.personas.length; i++) {
   var persona = db.personas[i];
+  db.indicePersonas[persona.id] = i;
 
-  db.indicePersonas[persona.id] = persona;
 }
+
+console.log(db.personas[db.indicePersonas[7]]);
+
+
+
+
 
 app.get('/', function (req, res) {
   res.send('Bienvenidos');
@@ -22,38 +28,79 @@ app.get('/', function (req, res) {
 
 //listo todas las personas
 app.get('/personas', (req,res) => {
-  for (var i = 0; i < db.personas.length; i++) {
+
     res.send(db.personas);
-  }
+  
 })
 
 //MUESTRO UN CLIENTE PARTICULAR
 app.get('/personas/:id', (req,res) => {
-  var persona = db.indicePersonas[req.params.id];
+
+  var persona = db.personas[db.indicePersonas[req.params.id]];
   
   if (persona === undefined) {
     res.send('No Existe');
+    res.status(404)
     return;
   }
-  res.send(persona.id + ' ' + persona.value);
+
+ res.send(persona);
 
 });
 
 //ELIMINO UN CLIENTE PARTICULAR
 app.delete('/personas/:id', (req,res) => {
-  var persona = db.indicePersonas[req.params.id];
+  var persona = db.personas[db.indicePersonas[req.params.id]];
 
   if (persona === undefined) {    
       res.send('No Existe!');
+  }
+  db.personas.splice(db.indicePersonas[req.params.id],1);  
+  delete(db.indicePersonas[req.params.id]);
+  res.send('Cliente eliminado');
 
+  return;
+
+})
+
+//AGREGO UN CLIENTE
+app.post('/personas/:id/:value', (req,res) => {
+  var persona = db.personas[db.indicePersonas[req.params.id]];
+
+  if (persona === undefined) {    
+    db.indicePersonas[req.params.id] =  db.personas.length ;
+    db.personas[(db.personas.length )] =   { id: req.params.id, value: req.params.value }
+    res.send('Agrego');
+    return;
   }
 
-  db.personas.splice(db.indicePersonas[req.params.id],1);
-  
-  console.log(db.indicePersonas[req.params.id]);
-  //FALTA ELIMINAR LA PERSONA
+  res.send('Cliente ya existe');
+
   return;
+
 })
+
+
+//MODIFICO UN CLIENTE
+app.patch('/personas/:id/:value', (req,res) => {
+  var persona = db.personas[db.indicePersonas[req.params.id]];
+
+  if (persona === undefined) {    
+    res.send('Cliente NO existe');
+    return;
+  }
+  db.personas[db.indicePersonas[req.params.id]] =   { id: req.params.id, value: req.params.value }
+
+  res.send('Agrego');
+
+
+
+  return;
+
+})
+
+
+
 
 
 app.listen(3000, function () {
