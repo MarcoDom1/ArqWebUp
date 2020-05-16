@@ -39,8 +39,8 @@ app.get('/personas/:id', (req,res) => {
   var persona = db.personas[db.indicePersonas[req.params.id]];
   
   if (persona === undefined) {
-    res.send('No Existe');
-    res.status(404)
+
+    res.status(404).send('Cliente no existe!');
     return;
   }
 
@@ -53,7 +53,7 @@ app.delete('/personas/:id', (req,res) => {
   var persona = db.personas[db.indicePersonas[req.params.id]];
 
   if (persona === undefined) {    
-      res.send('No Existe!');
+    res.status(404).send('Cliente no existe!');
   }
   db.personas.splice(db.indicePersonas[req.params.id],1);  
   delete(db.indicePersonas[req.params.id]);
@@ -74,7 +74,7 @@ app.post('/personas/:id/:value', (req,res) => {
     return;
   }
 
-  res.send('Cliente ya existe');
+  res.status(403).send('Cliente ya existe!');
 
   return;
 
@@ -86,7 +86,7 @@ app.patch('/personas/:id/:value', (req,res) => {
   var persona = db.personas[db.indicePersonas[req.params.id]];
 
   if (persona === undefined) {    
-    res.send('Cliente NO existe');
+    res.status(404).send('Cliente no existe!');
     return;
   }
   db.personas[db.indicePersonas[req.params.id]] =   { id: req.params.id, value: req.params.value }
