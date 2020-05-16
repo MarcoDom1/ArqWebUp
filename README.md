@@ -8,7 +8,12 @@ modificar el estado de un cliente, borrar un cliente.
 ENDPOINTS:
 
 GET /personas
+
 GET /personas/:id
+
 DELETE /personas/:id
+
 PATCH /personas/:id/:value
+
 PUT   /personas/:id/:value
+
