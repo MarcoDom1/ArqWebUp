@@ -48,7 +48,7 @@ router.delete('/:id', (req,res) => {
 })
 
 //AGREGO UN CLIENTE
-router.post('/add', (req,res) => {
+router.post('/', (req,res) => {
   var persona =  personas[req.body.id];
 
   if (persona === undefined) {    
@@ -62,7 +62,7 @@ router.post('/add', (req,res) => {
 })
 
 //MODIFICO UN CLIENTE
-router.patch('/mod', (req,res) => {
+router.patch('/', (req,res) => {
   var persona =  personas[req.body.id];
 
   if (persona === undefined) {    
